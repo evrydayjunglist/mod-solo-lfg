@@ -28,10 +28,10 @@ public:
     }
 };
 
-class lfg_solo : public WorldScript
+class lfg_solo_WorldScript : public WorldScript
 {
 public:
-    lfg_solo() : WorldScript("lfg_solo") {}
+    lfg_solo_WorldScript() : WorldScript("lfg_solo") {}
 
     void OnAfterConfigLoad(bool /*reload*/) override
     {
@@ -42,8 +42,23 @@ public:
     }
 };
 
+class lfg_solo_GroupScript : public GroupScript
+{
+public:
+    lfg_solo_GroupScript() : GroupScript("lfg_solo") {}
+
+    void OnCreate(Group* group, Player* /*leader*/)
+    {
+        if (sConfigMgr->GetOption<bool>("SoloLFG.Enable", true))
+        {
+            group->SetLootMethod(LootMethod::FREE_FOR_ALL);
+        }
+    }
+};
+
 void AddLfgSoloScripts()
 {
     new lfg_solo_announce();
-    new lfg_solo();
+    new lfg_solo_WorldScript();
+    new lfg_solo_GroupScript();
 }
